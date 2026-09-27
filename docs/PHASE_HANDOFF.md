@@ -11,6 +11,7 @@
 - Screenshot pipeline: `src/app/results/extraction*`, `src/app/results/screenshot-uploader.tsx`, `src/app/results/review-editor.tsx`, `src/domain/extraction*`. Default provider is manual-only. Human confirmation calls `confirm_extraction_candidate`; candidates never write official stats before that RPC.
 - Discord attendance: `src/app/api/discord/interactions/route.ts`, `src/lib/discord-interaction.ts`, `src/lib/discord-signature.ts`, `src/app/settings/`, `scripts/register-discord-commands.mjs`. No self-bot or privileged Gateway intents.
 - Localization and confirmation prompts: `src/lib/i18n.ts`, `src/components/confirm-form.tsx`.
+- War Builder presentation: `src/app/builder/formation-board.tsx` and `src/app/globals.css` now offer Normal and Compact modes. Compact shows A1–A5 above B1–B5, opens the Player Pool on demand, and uses the existing move/Ultimate actions.
 - Deployment: `docs/DEPLOYMENT.md`, `docs/DISCORD_SETUP.md`, `.env.example`.
 
 ## Database migrations
@@ -32,6 +33,7 @@ Hosted Production was last observed at `00008`. Do not use OCR or Discord integr
 - Production build — PASS (Next.js 16.3.6).
 - Discord registration script syntax — PASS.
 - Browser — Thai/English register form, 390×844 and 768×1024 document widths, and unauthenticated protected-route redirect verified. No hosted writes performed.
+- Compact Builder visual check — all ten full squads fit at 1366×768 and 1280×800; responsive layouts at 1024×768 and 390×844 had no horizontal overflow. Pool reveal, player selection, and return to Normal mode were exercised using a temporary local fixture, which was removed before the production build.
 - Code review — authorization remains server/database enforced; service key is only used in the signed Discord route; all reviewed security-definer SQL functions use fixed search paths and role checks; confirmation/finalization actions are explicit; database query failures are no longer presented as empty results in core pages.
 - Independent audit follow-up — corrected Dashboard and Members current attendance totals to exclude archived players whose retained preparing-War attendance is `LEAVE`; the regression suite passes. The check was local and made no hosted Production writes.
 

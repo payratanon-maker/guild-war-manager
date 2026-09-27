@@ -134,6 +134,10 @@ export default async function Builder({
             assigned: t("assigned"),
             empty: t("empty"),
             error: t("error"),
+            normalMode: t("normalMode"),
+            compactMode: t("compactMode"),
+            showPool: t("showPool"),
+            hidePool: t("hidePool"),
           }}
         />
       )}

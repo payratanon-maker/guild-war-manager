@@ -65,6 +65,8 @@ Duplicate/integrity rules: a player appears at most once in a formation/War, a s
 
 Desktop layout: Player Pool grouped by class on the left, Party A in the center, and Party B on the right. Player cards show class indicator/color, player name, and Ultimate icon. Support Pool → Squad, Squad → Squad, A → B, B → A, and remove to Pool. Provide a mobile/touch select-target flow so dragging is not required.
 
+The Builder also offers a compact presentation mode for sharing a single desktop screenshot: A1–A5 form the first row and B1–B5 the second when width permits. Each squad shows occupancy and up to six short player rows with class color, Ultimate selector, and remove action. The Pool can be opened for edits; Normal mode remains available. Both modes use the same authorized formation actions and constraints.
+
 ### Ultimate
 
 Ultimate belongs to a War assignment/formation, not permanently to a player. It may be represented by image/icon assets. Preserve the Ultimate used in the War snapshot.

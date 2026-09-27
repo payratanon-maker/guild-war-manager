@@ -37,6 +37,7 @@
 
 - All UI placement requests call `move_formation_player`, an authorized PostgreSQL function. It locks the singleton Current Formation row, checks the player and Leave status, and moves, swaps, or removes in one transaction. The deferrable unique slot constraint permits atomic swaps and still rejects duplicate/overfilled positions at commit.
 - dnd-kit provides pointer/touch/keyboard drag targets. The same action powers a select-player/choose-squad fallback, and the UI refreshes only after a successful database write. The Player Pool is active-only and filters by search/class.
+- The Builder's Normal and Compact modes share the same client component, drag/drop targets, and server actions. Compact mode rearranges A1–A5 above B1–B5, condenses player rows, and collapses the Pool until opened; it adds no database state or authorization path.
 
 ## Phase 6 Ultimate and War history
 

@@ -55,6 +55,10 @@ type Labels = {
   assigned: string;
   empty: string;
   error: string;
+  normalMode: string;
+  compactMode: string;
+  showPool: string;
+  hidePool: string;
 };
 
 function PlayerCard({
@@ -69,6 +73,8 @@ function PlayerCard({
   ultimates,
   iconBase,
   onUltimate,
+  compact,
+  onRemove,
   labels,
 }: {
   player: Player;
@@ -82,6 +88,8 @@ function PlayerCard({
   ultimates: Ultimate[];
   iconBase: string;
   onUltimate: (id: string | null) => void;
+  compact: boolean;
+  onRemove?: () => void;
   labels: Labels;
 }) {
   const {
@@ -120,6 +128,7 @@ function PlayerCard({
             : undefined,
         }}
         aria-label={`${labels.select} ${player.display_name}`}
+        title={player.display_name}
       >
         <span className="class-dot" style={{ backgroundColor: item.color }} />
         <span className="player-card-name">
@@ -145,11 +154,13 @@ function PlayerCard({
       </button>
       {assignment && selectable && (
         <label className="ultimate-picker">
-          {labels.ultimate}
+          <span className="ultimate-picker-label">{labels.ultimate}</span>
           <select
             value={assignment.ultimate_id ?? ""}
             disabled={disabled}
             onChange={(event) => onUltimate(event.target.value || null)}
+            aria-label={`${labels.ultimate}: ${player.display_name}`}
+            title={ultimate?.name ?? labels.ultimate}
           >
             <option value="">—</option>
             {ultimates.map((choice) => (
@@ -158,11 +169,23 @@ function PlayerCard({
                 value={choice.id}
                 disabled={!choice.active}
               >
-                {choice.name}
+                {compact ? choice.code : choice.name}
               </option>
             ))}
           </select>
         </label>
+      )}
+      {compact && assignment && selectable && onRemove && (
+        <button
+          type="button"
+          className="compact-remove"
+          aria-label={`${labels.remove} ${player.display_name}`}
+          title={`${labels.remove} ${player.display_name}`}
+          disabled={disabled}
+          onClick={onRemove}
+        >
+          ×
+        </button>
       )}
     </div>
   );
@@ -181,6 +204,8 @@ function Squad({
   ultimates,
   iconBase,
   onUltimate,
+  onRemove,
+  compact,
   labels,
 }: {
   party: Party;
@@ -195,6 +220,8 @@ function Squad({
   ultimates: Ultimate[];
   iconBase: string;
   onUltimate: (playerId: string, ultimateId: string | null) => void;
+  onRemove: (playerId: string) => void;
+  compact: boolean;
   labels: Labels;
 }) {
   const { setNodeRef, isOver } = useDroppable({
@@ -244,13 +271,25 @@ function Squad({
                 ultimates={ultimates}
                 iconBase={iconBase}
                 onUltimate={(id) => onUltimate(player.id, id)}
+                compact={compact}
+                onRemove={() => onRemove(player.id)}
                 labels={labels}
               />
             )
           );
         })}
+        {compact &&
+          Array.from({ length: 6 - occupants.length }, (_, index) => (
+            <div
+              key={`empty-${index}`}
+              className="squad-slot-placeholder"
+              aria-hidden="true"
+            >
+              —
+            </div>
+          ))}
       </div>
-      {occupants.length === 0 && (
+      {!compact && occupants.length === 0 && (
         <div className="squad-empty">{labels.empty}</div>
       )}
     </section>
@@ -280,6 +319,8 @@ export function FormationBoard({
   const [pending, startTransition] = useTransition();
   const [search, setSearch] = useState("");
   const [classFilter, setClassFilter] = useState("");
+  const [compact, setCompact] = useState(false);
+  const [showPool, setShowPool] = useState(false);
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 7 } }),
     useSensor(TouchSensor, {
@@ -350,15 +391,43 @@ export function FormationBoard({
   });
   return (
     <DndContext sensors={sensors} onDragEnd={onDragEnd}>
+      <div className="builder-view-controls">
+        <button
+          type="button"
+          className="secondary-button"
+          aria-pressed={!compact}
+          onClick={() => setCompact(false)}
+        >
+          {labels.normalMode}
+        </button>
+        <button
+          type="button"
+          className="secondary-button"
+          aria-pressed={compact}
+          onClick={() => setCompact(true)}
+        >
+          {labels.compactMode}
+        </button>
+        {compact && (
+          <button
+            type="button"
+            className="secondary-button"
+            aria-expanded={showPool}
+            onClick={() => setShowPool(!showPool)}
+          >
+            {showPool ? labels.hidePool : labels.showPool}
+          </button>
+        )}
+      </div>
       {error && (
         <p role="alert" className="error-state">
           {error}
         </p>
       )}
-      <div className="builder-grid">
+      <div className={`builder-grid ${compact ? "builder-compact" : ""}`}>
         <section
           ref={setPoolRef}
-          className={`panel pool-panel ${poolOver ? "drop-over" : ""}`}
+          className={`panel pool-panel ${poolOver ? "drop-over" : ""} ${showPool ? "pool-visible" : ""}`}
         >
           <div className="section-title">
             <h2>{labels.pool}</h2>
@@ -420,6 +489,7 @@ export function FormationBoard({
                       ultimates={ultimates}
                       iconBase={iconBase}
                       onUltimate={() => {}}
+                      compact={false}
                       labels={labels}
                     />
                   ))}
@@ -446,6 +516,10 @@ export function FormationBoard({
                 ultimates={ultimates}
                 iconBase={iconBase}
                 onUltimate={onUltimate}
+                onRemove={(playerId) =>
+                  submit(playerId, { party: null, squad: null, slot: null })
+                }
+                compact={compact}
                 labels={labels}
               />
             ))}

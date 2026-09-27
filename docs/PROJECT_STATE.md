@@ -14,6 +14,7 @@
 - Phase 12: role/RLS/constraint/snapshot/OCR/Discord/statistics tests and security grant review. No security policy was weakened.
 - Phase 13: Vercel/Supabase deployment runbook and environment/migration gates. Deployment remains external.
 - Phase 14: integrated PGlite acceptance, browser language/protected-route checks, and mobile/tablet registration layout checks.
+- Post-phase Builder improvement (2026-09-28): Normal/Compact toggle, a two-row desktop board for A1–A5 and B1–B5, short squad/player rows, and a collapsible Player Pool for editing. Formation actions and database constraints are unchanged.
 
 ## Final verification
 
@@ -24,6 +25,7 @@
 - `npm run build` — PASS
 - `node --check scripts/register-discord-commands.mjs` — PASS
 - Local browser: registration labels verified in Thai and English; no horizontal overflow at 390×844 and 768×1024; unauthenticated `/builder` redirects to `/login`. No account credentials, screenshots, or War data were submitted.
+- Compact Builder visual check: a temporary local fixture with 60 assigned players fit all ten squads at 1366×768 and 1280×800 (last card bottom y=670). At 1024×768 and 390×844 the grid wrapped without horizontal overflow. The fixture was removed before the final build; no hosted data was changed.
 
 ## Independent engineering audit — 2026-09-27
 

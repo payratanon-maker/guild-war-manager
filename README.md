@@ -36,6 +36,10 @@ npm run build
 
 Vitest applies reviewed migrations to in-memory PGlite and checks domain invariants, RLS boundaries, role privileges, snapshots, formation moves, result/extraction gates, Discord attendance, statistics, and localization. Hosted username-only signup/login and a safe protected-read denial were previously verified. Hosted full Phase 2–7 acceptance remains intentionally deferred until a non-production Supabase target is available.
 
+## War Builder display
+
+On `/builder`, use **Normal** for the full Player Pool and party columns. Use **Compact board** to place A1–A5 above B1–B5 for a desktop screenshot. **Show pool** reveals reserve players when editing in compact mode. Player rows still support drag/drop, Ultimate selection, and removal; formation rules remain enforced by the database.
+
 ## Structure
 
 - `src/app/` — routes, server actions, and UI
